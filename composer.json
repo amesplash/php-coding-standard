@@ -1,7 +1,7 @@
 {
     "name": "amesplash/php-coding-standard",
     "type": "phpcodesniffer-standard",
-    "description": "The Amesplash PHP Coding Standard",
+    "description": "The amésplash PHP Coding Standard",
     "keywords": [
         "amesplash",
         "coding",
