@@ -75,6 +75,19 @@
                 <element key="show_source" value="highlight_file"/>
                 <element key="sizeof" value="count"/>
                 <element key="strchr" value="strstr"/>
+                <element key="debug_backtrace" value="null"/>
+                <element key="dump" value="null"/>
+                <element key="exec" value="null"/>
+                <element key="passthru" value="null"/>
+                <element key="phpinfo" value="null"/>
+                <element key="print_r" value="null"/>
+                <element key="proc_open" value="null"/>
+                <element key="shell_exec" value="null"/>
+                <element key="system" value="null"/>
+                <element key="var_dump" value="null"/>
+                <!-- Debug functions -->
+                <element key="dd" value="null"/>
+                <element key="d" value="null"/>
             </property>
         </properties>
     </rule>
