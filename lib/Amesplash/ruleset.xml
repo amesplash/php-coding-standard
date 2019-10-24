@@ -489,5 +489,6 @@
 
     <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
         <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification"/>
+        <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification"/>
     </rule>
 </ruleset>
