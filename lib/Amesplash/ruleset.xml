@@ -7,7 +7,10 @@
     <description>The amesplash coding standard.</description>
 
     <!-- Import PSR-12 coding standard (base) -->
-    <rule ref="PSR12" />
+    <rule ref="PSR12">
+        <exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
+        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
+    </rule>
 
     <!-- Force array element indentation with 4 spaces -->
     <rule ref="Generic.Arrays.ArrayIndent"/>
@@ -26,10 +29,11 @@
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
     <!-- Forbid inline HTML in PHP code -->
     <rule ref="Generic.Files.InlineHTML"/>
-    <!-- Align corresponding assignment statement tokens -->
-    <rule ref="Generic.Formatting.MultipleStatementAlignment">
+    <!-- Forbid lines lengths over 80 -->
+    <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="error" value="true"/>
+            <property name="lineLimit" value="80"/>
+            <property name="absoluteLineLimit" value="80"/>
         </properties>
     </rule>
     <!-- Force whitespace after a type cast -->
@@ -468,5 +472,9 @@
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
         <!-- turned off by PSR2 -> turning back on -->
         <severity>5</severity>
+    </rule>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+        <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification"/>
     </rule>
 </ruleset>
