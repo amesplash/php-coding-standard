@@ -7,7 +7,6 @@
     <description>The amesplash coding standard.</description>
 
     <!-- Import PSR-12 coding standard (base) -->
-    <rule ref="PSR1" />
     <rule ref="PSR12" />
 
     <!-- Force array element indentation with 4 spaces -->
@@ -90,6 +89,10 @@
     <rule ref="Generic.PHP.SAPIUsage"/>
     <!-- Forbid comments starting with # -->
     <rule ref="PEAR.Commenting.InlineComment"/>
+    <!-- Disallow else if in favor of elseif -->
+    <rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed">
+        <type>error</type>
+    </rule>
     <!-- Require comma after last element in multi-line array -->
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
     <!-- Require presence of constant visibility -->
@@ -146,6 +149,11 @@
                     @link,
                     @see,
                     @uses,
+                "/>
+                <element value="
+                    @ORM\,
+                    @ODM\,
+                    @PHPCR\,
                 "/>
                 <element value="@param"/>
                 <element value="@return"/>
@@ -222,10 +230,6 @@
     <rule ref="SlevomatCodingStandard.Functions.UnusedInheritedVariablePassedToClosure"/>
     <!-- Require use statements to be alphabetically sorted -->
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
-    <!-- Requires only one namespace in a file -->
-    <rule ref="SlevomatCodingStandard.Namespaces.RequireOneNamespaceInFile"/>
-    <!-- Enforces one space after namespace, disallows content between namespace name and semicolon and disallows use of bracketed syntax -->
-    <rule ref="SlevomatCodingStandard.Namespaces.NamespaceDeclaration"/>
     <!-- Forbid fancy group uses -->
     <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
     <!-- Forbid multiple use statements on same line -->
@@ -299,6 +303,8 @@
     <rule ref="SlevomatCodingStandard.PHP.UselessParentheses"/>
     <!-- Forbid useless semicolon `;` -->
     <rule ref="SlevomatCodingStandard.PHP.UselessSemicolon"/>
+    <!-- Require /* @var type $foo */ and similar simple inline annotations to be replaced by assert() -->
+    <rule ref="SlevomatCodingStandard.PHP.RequireExplicitAssertion"/>
     <!-- Require use of short versions of scalar types (i.e. int instead of integer) -->
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <!-- Require the `null` type hint to be in the last position of annotations -->
@@ -307,6 +313,12 @@
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
     <!-- Require one space between typehint and variable, require no space between nullability sign and typehint -->
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+    <!-- Require space around colon in return types -->
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
+        <properties>
+            <property name="spacesCountBeforeColon" value="1"/>
+        </properties>
+    </rule>
     <!-- Require types to be written as natively if possible;
          require iterable types to specify phpDoc with their content;
          forbid useless/duplicated information in phpDoc -->
@@ -388,7 +400,6 @@
         <!-- Doesn't work with self as typehint -->
         <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
     </rule>
-
     <!-- Forbid global functions -->
     <rule ref="Squiz.Functions.GlobalFunction"/>
     <!-- Force camelCase variables -->
@@ -447,4 +458,15 @@
     </rule>
     <!-- Forbid spaces before semicolon `;` -->
     <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+    <!-- Forbid superfluous whitespaces -->
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <!-- turned on by PSR2 -> turning back off -->
+            <property name="ignoreBlankLines" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+        <!-- turned off by PSR2 -> turning back on -->
+        <severity>5</severity>
+    </rule>
 </ruleset>
