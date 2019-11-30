@@ -29,12 +29,9 @@
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
     <!-- Forbid inline HTML in PHP code -->
     <rule ref="Generic.Files.InlineHTML"/>
-    <!-- Forbid lines lengths over 80 -->
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="80"/>
-            <property name="absoluteLineLimit" value="80"/>
-        </properties>
+    <!-- Use Amesplash.Lines.LineLength instead -->
+    <rule ref="Generic.Files">
+        <exclude name="Generic.Files.LineLength"/>
     </rule>
     <!-- Force whitespace after a type cast -->
     <rule ref="Generic.Formatting.SpaceAfterCast">

@@ -11,7 +11,7 @@
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Standards\Generic\Sniffs\Files;
+namespace Amesplash\Sniffs\Files;
 
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
@@ -34,7 +34,7 @@ class LineLengthSniff implements Sniff
      *
      * @var integer
      */
-    public $absoluteLineLimit = 100;
+    public $absoluteLineLimit = 80;
 
     /**
      * Whether or not to ignore comment lines.
@@ -48,7 +48,7 @@ class LineLengthSniff implements Sniff
      *
      * @var boolean
      */
-    public $ignoreUseStatementsLines = false;
+    public $ignoreUseStatementsLines = true;
 
 
     /**
