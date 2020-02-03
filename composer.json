@@ -29,7 +29,7 @@
     },
     "require": {
         "php": "^7.3",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
         "slevomat/coding-standard": "dev-master#964a3ff08d7ee924510c3b705f826165adaa97fe",
         "squizlabs/php_codesniffer": "^3.5"
     },
