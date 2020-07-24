@@ -19,7 +19,6 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class LineLengthSniff implements Sniff
 {
-
     /**
      * The limit that the length of a line should not exceed.
      *
