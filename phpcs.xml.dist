@@ -15,5 +15,5 @@
 
     <rule ref="Amesplash"/>
 
-    <file>lib</file>
+    <file>src</file>
 </ruleset>

@@ -2,13 +2,14 @@
 <ruleset
     name="Amesplash"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../vendor/squizlabs/php_codesniffer/phpcs.xsd"
+    xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
     <description>The amesplash coding standard.</description>
 
     <!-- Import PSR-12 coding standard (base) -->
     <rule ref="PSR12">
         <!-- checked by SlevomatCodingStandard.Namespaces.UseSpacing -->
+        <exclude name="PSR2.Namespaces.UseDeclaration.SpaceAfterLastUse"/>
         <exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
         <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
         <!-- checked by SlevomatCodingStandard.Namespaces.NamespaceSpacing -->
