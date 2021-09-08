@@ -2,16 +2,15 @@
 <ruleset
     name="Amesplash"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../vendor/squizlabs/php_codesniffer/phpcs.xsd"
+    xsi:noNamespaceSchemaLocation="../../vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
-    <description>The amesplash coding standard.</description>
+    <description>The Amesplash coding standard.</description>
 
     <!-- Import PSR-12 coding standard (base) -->
     <rule ref="PSR12">
         <!-- checked by SlevomatCodingStandard.Namespaces.UseSpacing -->
         <exclude name="PSR2.Namespaces.UseDeclaration.SpaceAfterLastUse"/>
-        <exclude name="PSR12.Functions.ReturnTypeDeclaration.SpaceBeforeColon"/>
-        <exclude name="PSR12.Files.FileHeader.SpacingAfterBlock"/>
+        <exclude name="PSR12.Files.FileHeader"/>
         <!-- checked by SlevomatCodingStandard.Namespaces.NamespaceSpacing -->
         <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
         <!-- checked by SlevomatCodingStandard.Operators.SpreadOperatorSpacing -->
@@ -84,19 +83,7 @@
                 <element key="show_source" value="highlight_file"/>
                 <element key="sizeof" value="count"/>
                 <element key="strchr" value="strstr"/>
-                <element key="debug_backtrace" value="null"/>
-                <element key="dump" value="null"/>
-                <element key="exec" value="null"/>
-                <element key="passthru" value="null"/>
-                <element key="phpinfo" value="null"/>
-                <element key="print_r" value="null"/>
-                <element key="proc_open" value="null"/>
-                <element key="shell_exec" value="null"/>
-                <element key="system" value="null"/>
-                <element key="var_dump" value="null"/>
-                <!-- Debug functions -->
-                <element key="dd" value="null"/>
-                <element key="d" value="null"/>
+                <element key="user_error" value="trigger_error"/>
             </property>
         </properties>
     </rule>
@@ -119,6 +106,8 @@
     <rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed">
         <type>error</type>
     </rule>
+    <!-- Require that single line arrays have the correct spacing: no space around brackets and one space after comma -->
+    <rule ref="SlevomatCodingStandard.Arrays.SingleLineArrayWhitespace"/>
     <!-- Require comma after last element in multi-line array -->
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
     <!-- Require presence of constant visibility -->
@@ -129,6 +118,8 @@
     </rule>
     <!-- Forbid LSB for constants (static::FOO) -->
     <rule ref="SlevomatCodingStandard.Classes.DisallowLateStaticBindingForConstants"/>
+    <!-- Forbid more than one constant declared per statement -->
+    <rule ref="SlevomatCodingStandard.Classes.DisallowMultiConstantDefinition"/>
     <!-- Forbid empty lines around type declarations -->
     <rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces">
         <properties>
@@ -155,7 +146,7 @@
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
     <!-- Forbid prefix and suffix "Interface" for interfaces -->
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
-    <!-- Forbid suffix "Trait" for interfaces -->
+    <!-- Forbid suffix "Trait" for traits -->
     <rule ref="SlevomatCodingStandard.Classes.SuperfluousTraitNaming"/>
     <!-- Require specific order of phpDoc annotations with empty newline between specific groups -->
     <rule ref="SlevomatCodingStandard.Commenting.DocCommentSpacing">
@@ -179,8 +170,16 @@
                     @ODM\,
                     @PHPCR\,
                 "/>
-                <element value="@param"/>
-                <element value="@return"/>
+                <element value="
+                    @param,
+                    @psalm-param,
+                    @phpstan-param,
+                "/>
+                <element value="
+                    @return,
+                    @psalm-return,
+                    @phpstan-return,
+                "/>
                 <element value="@throws"/>
             </property>
         </properties>
@@ -212,18 +211,33 @@
                 <element value="~^Created by .+\.\z~i"/>
                 <element value="~^(User|Date|Time): \S+\z~i"/>
                 <element value="~^\S+ [gs]etter\.\z~i"/>
-                <element value="~^Class \S+\z~i"/>
+                <element value="~^(Class|Interface|Trait) \S+\z~i"/>
             </property>
         </properties>
     </rule>
-    <!-- report invalid format of inline phpDocs with @var -->
+    <!-- Report invalid format of inline phpDocs with @var -->
     <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
     <!-- Require comments with single line written as one-liners -->
     <rule ref="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
     <!-- Forbid assignments in conditions -->
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
     <!-- Require consistent spacing for block structures -->
-    <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing">
+        <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountBeforeControlStructure" />
+        <exclude name="SlevomatCodingStandard.ControlStructures.BlockControlStructureSpacing.IncorrectLinesCountBeforeFirstControlStructure" />
+        <properties>
+            <property name="controlStructures" type="array">
+                <element value="if" />
+                <element value="do" />
+                <element value="while" />
+                <element value="for" />
+                <element value="foreach" />
+                <element value="switch" />
+                <element value="try" />
+                <element value="default" />
+            </property>
+        </properties>
+    </rule>
     <!-- Forbid fancy yoda conditions -->
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
     <!-- Require usage of early exit -->
@@ -231,20 +245,25 @@
     <!-- Require consistent spacing for jump statements -->
     <rule ref="SlevomatCodingStandard.ControlStructures.JumpStatementsSpacing">
         <properties>
-            <property name="tokensToCheck" type="array">
-                <element value="T_RETURN" />
-                <element value="T_THROW" />
-                <element value="T_YIELD" />
-                <element value="T_YIELD_FROM" />
+            <property name="linesCountBeforeWhenFirstInCaseOrDefault" value="0"/>
+            <property name="linesCountAfterWhenLastInCaseOrDefault" value="1"/>
+            <property name="linesCountAfterWhenLastInLastCaseOrDefault" value="0"/>
+            <property name="jumpStatements" type="array">
+                <element value="return" />
+                <element value="throw" />
+                <element value="yield" />
+                <element value="yield_from" />
             </property>
         </properties>
     </rule>
     <!-- Require language constructs without parentheses -->
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
-    <!-- Require new instances with parentheses -->
-    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
+    <!-- Require usage of null coalesce operator equal operator when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <!-- Require usage of null coalesce operator when possible -->
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceOperator"/>
+    <!-- Require usage of null safe operator when possible -->
+    <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullSafeObjectOperator"/>
     <!-- Forbid usage of conditions when a simple return can be used -->
     <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
     <!-- Forbid usage of boolean-only ternary operator usage (e.g. $foo ? true : false) -->
@@ -253,6 +272,14 @@
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
     <!-- Require using Throwable instead of Exception -->
     <rule ref="SlevomatCodingStandard.Exceptions.ReferenceThrowableOnly"/>
+    <!-- Ensure Arrow Functions declaration format -->
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
+        <properties>
+            <property name="spacesCountAfterKeyword" value="1"/>
+            <property name="spacesCountBeforeArrow" value="1"/>
+            <property name="spacesCountAfterArrow" value="1"/>
+        </properties>
+    </rule>
     <!-- Require closures not referencing $this be static -->
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
     <!-- Forbid unused variables passed to closures via `use` -->
@@ -294,18 +321,20 @@
         <properties>
             <property name="linesCountAfterLastUse" value="1"/>
             <property name="linesCountBeforeFirstUse" value="1"/>
-            <property name="linesCountBetweenUseTypes" value="0"/>
+            <property name="linesCountBetweenUseTypes" value="1"/>
         </properties>
     </rule>
     <!-- Forbid useless alias for classes, constants and functions -->
     <rule ref="SlevomatCodingStandard.Namespaces.UselessAlias"/>
     <!-- Forbid weak comparisons -->
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
+    <!-- Forbid spacing before the negative operator `-` -->
+    <rule ref="SlevomatCodingStandard.Operators.NegationOperatorSpacing"/>
     <!-- Require the usage of assignment operators, eg `+=`, `.=` when possible -->
     <rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator"/>
     <!-- Require no spacing after spread operator -->
     <rule ref="SlevomatCodingStandard.Operators.SpreadOperatorSpacing"/>
-    <!-- forbid argument unpacking for functions specialized by PHP VM -->
+    <!-- Forbid argument unpacking for functions specialized by PHP VM -->
     <rule ref="SlevomatCodingStandard.PHP.OptimizedFunctionsWithoutUnpacking"/>
     <!-- Forbid `list(...)` syntax -->
     <rule ref="SlevomatCodingStandard.PHP.ShortList"/>
@@ -315,16 +344,20 @@
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property
-                name="newlinesCountBetweenOpenTagAndDeclare"
-                value="2"
+                name="declareOnFirstLine"
+                value="false"
+            />
+            <property
+                name="linesCountBeforeDeclare"
+                value="1"
             />
             <property
                 name="spacesCountAroundEqualsSign"
                 value="0"
             />
             <property
-                name="newlinesCountAfterDeclare"
-                value="2"
+                name="linesCountAfterDeclare"
+                value="1"
             />
         </properties>
     </rule>
@@ -345,20 +378,60 @@
     <!-- Require space around colon in return types -->
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
         <properties>
-            <property name="spacesCountBeforeColon" value="1"/>
+            <property name="spacesCountBeforeColon" value="0"/>
         </properties>
     </rule>
     <!-- Require types to be written as natively if possible;
          require iterable types to specify phpDoc with their content;
          forbid useless/duplicated information in phpDoc -->
-<!--     <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
         <properties>
-            <property name="allAnnotationsAreUseful" value="true"/>
-            <property name="enableEachParameterAndReturnInspection" value="true"/>
+            <property name="traversableTypeHints" type="array">
+                <element value="Traversable"/>
+                <element value="Iterator"/>
+                <element value="IteratorAggregate"/>
+                <element value="Doctrine\Common\Collections\Collection"/>
+            </property>
         </properties>
-    </rule> -->
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+        <properties>
+            <property name="traversableTypeHints" type="array">
+                <element value="Traversable"/>
+                <element value="Iterator"/>
+                <element value="IteratorAggregate"/>
+                <element value="Doctrine\Common\Collections\Collection"/>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHintSpacing"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+        <properties>
+            <property name="traversableTypeHints" type="array">
+                <element value="Traversable"/>
+                <element value="Iterator"/>
+                <element value="IteratorAggregate"/>
+                <element value="Doctrine\Common\Collections\Collection"/>
+            </property>
+        </properties>
+    </rule>
     <!-- Forbid useless @var for constants -->
     <rule ref="SlevomatCodingStandard.TypeHints.UselessConstantTypeHint"/>
+    <!-- Require One Line Doc Comment where there's only 1 annotation present -->
+    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
+    <!-- Forbid useless phpDocs for functions -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment">
+        <properties>
+            <property name="traversableTypeHints" type="array">
+                <element value="Traversable"/>
+                <element value="Iterator"/>
+                <element value="IteratorAggregate"/>
+                <element value="Doctrine\Common\Collections\Collection"/>
+            </property>
+        </properties>
+    </rule>
+    <!-- Forbid useless inherit doc comment -->
+    <rule ref="SlevomatCodingStandard.Commenting.UselessInheritDocComment"/>
     <!-- Forbid duplicated variables assignments -->
     <rule ref="SlevomatCodingStandard.Variables.DuplicateAssignmentToVariable"/>
     <!-- Forbid useless variables -->
@@ -487,12 +560,12 @@
     <!-- Forbid superfluous whitespaces -->
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
         <properties>
-            <!-- turned on by PSR2 -> turning back off -->
+            <!-- turned on by PSR-12 -> turning back off -->
             <property name="ignoreBlankLines" value="false"/>
         </properties>
     </rule>
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
-        <!-- turned off by PSR2 -> turning back on -->
+        <!-- turned off by PSR-12 -> turning back on -->
         <severity>5</severity>
     </rule>
 </ruleset>
